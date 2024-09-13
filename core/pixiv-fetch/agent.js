@@ -1,5 +1,5 @@
 import https from 'https'
-import config from "../../config.js"
+import config from "../../dev-config.js"
 import baseOpiton from './base-option.js'
 
 const bypassSNI = config.proxy.bypassSNI

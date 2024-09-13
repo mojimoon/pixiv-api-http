@@ -2,7 +2,7 @@ import express from 'express'
 import bodyParser from 'body-parser'
 import proxy from 'express-http-proxy'
 
-import config from '../../config.js'
+import config from '../../dev-config.js'
 
 import {getPidIllust, getPidImage, getPidImageList, getPidManga} from './module/illust/index.js'
 import {getPidNovelSeries, getPidNovelSeriesContent, getPidNovelSeriesInfo, getPidNovel} from './module/novel/index.js'

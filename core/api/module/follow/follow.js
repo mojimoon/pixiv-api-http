@@ -1,5 +1,5 @@
 import {pixivJsonFetch, replaceURL} from "../../../pixiv-fetch/index.js";
-import config from "../../../../config.js";
+import config from "../../../../dev-config.js";
 import {search, searchFormat} from "../search/index.js";
 import {fixParam} from "../search/no-premium.js";
 

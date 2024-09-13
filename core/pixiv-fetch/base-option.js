@@ -1,4 +1,4 @@
-import config from '../../config.js'
+import config from '../../dev-config.js'
 const cookie = config.pixiv.cookie
 
 export default {

@@ -1,5 +1,5 @@
 import { pixivJsonFetch, replaceURL } from "../../../pixiv-fetch/index.js";
-/** @typedef {import('../../../../config.js').Lang} Lang */
+/** @typedef {import('../../../../dev-config.js').Lang} Lang */
 /** @typedef {import('../illust/pid.js').AuthorDTO} AuthorDTO */
 /** @typedef {import('./pid.js').NovelInfoDTO} NovelInfoDTO */
 

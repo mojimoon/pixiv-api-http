@@ -1,5 +1,5 @@
 import http from 'http'
-import config from "../../config.js"
+import config from "../../dev-config.js"
 
 export const rawHost = 'i.pximg.net'
 export const rawURL = 'https://' + rawHost

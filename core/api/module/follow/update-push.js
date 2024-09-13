@@ -1,4 +1,4 @@
-import config from "../../../../config.js"
+import config from "../../../../dev-config.js"
 import {getFollowUpdate} from "./follow.js"
 import fs from "fs"
 import {WebSocketServer} from "ws"
