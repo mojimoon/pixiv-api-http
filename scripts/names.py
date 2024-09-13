@@ -185,8 +185,9 @@ full_data = [
 ]
 
 import re
+import csv
 
-out_file = 'output/names.txt'
+out_file = 'output/names.csv'
 names = []
 
 for data in full_data:
@@ -200,5 +201,7 @@ for data in full_data:
     else:
         names.append(data[1])
 
-with open(out_file, 'w') as f:
-    f.write('\n'.join(names))
+with open(out_file, 'w', newline='') as f:
+    writer = csv.writer(f)
+    for a, b in zip(full_data, names):
+        writer.writerow([a[0], b])

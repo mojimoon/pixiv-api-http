@@ -130,4 +130,6 @@ dist
 cache/
 
 output/*.json
+output/json/*.json
 dev-config.js
+output/completed.csv

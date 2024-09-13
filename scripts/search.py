@@ -22,7 +22,7 @@ lang	Lang	语言	配置文件
 '''
 
 post_data = {
-    'word': 'ホシノ*テラー',
+    'word': '柚鳥ナツ',
     'type': 'artwork',
     'mode': 'full',
     'order': 'date',
