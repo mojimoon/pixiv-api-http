@@ -5,7 +5,7 @@ import time
 import csv
 
 api_url = 'http://127.0.0.1:1145/search'
-sleep_time = 30
+sleep_time = 180
 
 in_file = 'output/names.csv'
 out_dir = 'output/json'
@@ -42,7 +42,6 @@ with open(in_file, 'r') as f:
             print('Search test success, %d records found for %s, response saved to %s' % (total, row[1], out_file))
             if total == 0:
                 print('No records found. Check if the name is correct.')
-                time.sleep(sleep_time * 2)
             else:
                 with open(completed_ids, 'a') as f:
                     f.write('%d,%s,%d\n' % (int(row[0]), row[1], total))

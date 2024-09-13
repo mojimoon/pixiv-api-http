@@ -3,6 +3,7 @@ import csv
 import json
 import sys
 import time
+import os
 
 token_file = 'token'
 names_file = 'output/names.csv'
