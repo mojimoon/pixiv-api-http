@@ -31,11 +31,13 @@ with open(names_file, 'r') as f:
             sort='date_desc'
         )
         tot = len(res.illusts)
-        jsons.append(*res.illusts)
+        jsons.extend(res.illusts)
         while res.next_url:
             next_qs = api.parse_qs(res.next_url)
             res = api.search_illust(**next_qs)
-            jsons.append(*res.illusts)
+            if not res.illusts:
+                break
+            jsons.extend(res.illusts)
             tot += len(res.illusts)
         
         with open(f'{out_dir}/{_id}.json', 'w') as out:
@@ -43,5 +45,5 @@ with open(names_file, 'r') as f:
         print(f'wrote {tot} entries for {_id}: {name} in {time.time() - start_time:.2f} seconds')
         with open(completed, 'a') as out:
             out.write(f'{_id},{name},{tot}\n')
-        time.sleep(1)
+        time.sleep(60)
         
