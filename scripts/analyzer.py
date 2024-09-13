@@ -18,6 +18,7 @@ names = 'output/names.csv'
 
 output1 = 'result/tag_freq.csv'
 output2 = 'result/name_comb.csv'
+output3 = 'result/authors.csv'
 
 def load_csv(src):
     with open(src, 'r') as f:
@@ -31,7 +32,9 @@ def analyze():
     names_dict = load_csv(names)
     names_set = set(names_dict.values())
     pid_set = set()
-    tag_freq = {idx: defaultdict(int) for idx in range(29, 33)}
+    tag_freq = {idx: defaultdict(int) for idx in range(29, 34)}
+    author_freq = {idx: defaultdict(int) for idx in range(29, 34)}
+    author_dict = defaultdict(str)
     name_comb = defaultdict(int)
     for idx, src in zip(range(29, 33), srcs):
         data = load_json(src)
@@ -39,23 +42,35 @@ def analyze():
             tags = illust['tags']
             for tag in tags:
                 tag_freq[idx][tag] += 1
+            author_freq[idx][illust['author']['id']] += 1
                 
             if illust['id'] in pid_set:
                 continue
-            
+
             pid_set.add(illust['id'])
+            for tag in tags:
+                tag_freq[33][tag] += 1
+            author_freq[33][illust['author']['id']] += 1
             _names = names_set.intersection(tags)
             name_comb[tuple(_names)] += 1
+
+            if not author_dict[illust['author']['id']]:
+                author_dict[illust['author']['id']] = illust['author']['name']
     with open(output1, 'w', newline='') as f:
         writer = csv.writer(f)
-        writer.writerow(['tag', 'yuzu', 'momoi', 'midori', 'aris'])
+        writer.writerow(['tag', 'yuzu', 'momoi', 'midori', 'aris', 'total', 'ratio'])
         all_tags = set()
-        for idx in range(29, 33):
+        for idx in range(29, 34):
             all_tags.update(tag_freq[idx].keys())
         tags = list(all_tags)
-        tags.sort(key=lambda x: sum([tag_freq[idx][x] for idx in range(29, 33)]), reverse=True)
+        tags.sort(key=lambda x: tag_freq[33][x], reverse=True)
         for tag in tags:
-            writer.writerow([tag, *[tag_freq[idx][tag] for idx in range(29, 33)]])
+            if tag_freq[33][tag] < 10:
+                continue
+            writer.writerow([tag, 
+                *[tag_freq[idx][tag] for idx in range(29, 34)],
+                sum(tag_freq[idx][tag] for idx in range(29, 33)) / tag_freq[33][tag]
+            ])
     with open(output2, 'w', newline='') as f:
         writer = csv.writer(f)
         writer.writerow(['names', 'count'])
@@ -63,6 +78,21 @@ def analyze():
         name_combs.sort(key=lambda x: name_comb[x], reverse=True)
         for _names in name_combs:
             writer.writerow(['_'.join(_names), name_comb[_names]])
+    with open(output3, 'w', newline='') as f:
+        writer = csv.writer(f)
+        writer.writerow(['id', 'author', 'yuzu', 'momoi', 'midori', 'aris', 'total', 'ratio'])
+        all_authors = set()
+        for idx in range(29, 34):
+            all_authors.update(author_freq[idx].keys())
+        authors = list(all_authors)
+        authors.sort(key=lambda x: author_freq[33][x], reverse=True)
+        for author in authors:
+            if author_freq[33][author] < 10:
+                continue
+            writer.writerow([author, author_dict[author].replace(',', ' '),
+                *[author_freq[idx][author] for idx in range(29, 34)],
+                sum(author_freq[idx][author] for idx in range(29, 33)) / author_freq[33][author]
+            ])
 
 if __name__ == '__main__':
     analyze()
