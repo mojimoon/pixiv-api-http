@@ -19,9 +19,19 @@ api.auth(refresh_token=token)
 
 start_time = time.time()
 
+completed_ids = set()
+
+if os.path.exists(completed):
+    with open(completed, 'r') as f:
+        reader = csv.reader(f)
+        for row in reader:
+            completed_ids.add(row[0])
+
 with open(names_file, 'r') as f:
     reader = csv.reader(f)
     for row in reader:
+        if row[0] in completed_ids:
+            continue
         _id = row[0]
         name = row[1]
         jsons = []
