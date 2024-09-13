@@ -2,10 +2,12 @@ from pixivpy3 import *
 import csv
 import json
 import sys
+import time
 
-token_file = 'pixivpy/token'
+token_file = 'token'
 names_file = 'output/names.csv'
 out_dir = 'output/jsons'
+completed = 'output/completed.csv'
 
 token = None
 
@@ -15,18 +17,31 @@ with open(token_file, 'r') as f:
 api = AppPixivAPI()
 api.auth(refresh_token=token)
 
+start_time = time.time()
+
 with open(names_file, 'r') as f:
     reader = csv.reader(f)
     for row in reader:
         _id = row[0]
         name = row[1]
-        json_result = api.search_illust(
+        jsons = []
+        res = api.search_illust(
             name,
             search_target='exact_match_for_tags',
             sort='date_desc'
         )
+        tot = len(res.illusts)
+        jsons.append(*res.illusts)
+        while res.next_url:
+            next_qs = api.parse_qs(res.next_url)
+            res = api.search_illust(**next_qs)
+            jsons.append(*res.illusts)
+            tot += len(res.illusts)
+        
         with open(f'{out_dir}/{_id}.json', 'w') as out:
-            out.write(json.dumps(json_result))
-        print(f'Wrote {name} to {out_dir}/{_id}.json')
-        sys.exit(0)
-
+            out.write(json.dumps(jsons))
+        print(f'wrote {tot} entries for {_id}: {name} in {time.time() - start_time:.2f} seconds')
+        with open(completed, 'a') as out:
+            out.write(f'{_id},{name},{tot}\n')
+        time.sleep(1)
+        
