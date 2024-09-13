@@ -131,5 +131,8 @@ cache/
 
 output/*.json
 output/json/*.json
+output/jsons/*.json
 dev-config.js
 output/completed.csv
+*.exe
+pixivpy/token
